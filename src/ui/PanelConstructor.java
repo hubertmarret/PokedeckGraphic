@@ -122,9 +122,14 @@ public class PanelConstructor {
 				int iHealth = Integer.parseInt(health.getText());
 				if(iHealth > 9 && iHealth < 151)
 				{
-					Game.getInstance().addCard(sCardName, collection.getText(), iHealth, PokemonType.values()[typeList.getSelectedIndex()]);
-					Game.getInstance().saveDeck();
-					btnMsg.setText("the card " + sCardName + " has been added");
+					boolean exists = Game.getInstance().addCard(sCardName, collection.getText(), iHealth, PokemonType.values()[typeList.getSelectedIndex()]);
+					if(!exists)
+					{
+						Game.getInstance().saveDeck();
+						btnMsg.setText("the card " + sCardName + " has been added");
+					}
+					else
+						btnMsg.setText("the card " + sCardName + " already exists");
 				}
 				else
 				{

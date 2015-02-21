@@ -77,16 +77,25 @@ public class Game {
 		return cardDesc;
 	}
 	
-	public void addCard(String name, String collection, int health, PokemonType type)
+	public boolean addCard(String name, String collection, int health, PokemonType type)
 	{
-		CardDescriptor cardDesc = new CardDescriptor();
-		cardDesc.name = name;
-		cardDesc.cardType = CardType.POKEMONCARD;
-		cardDesc.collection = collection;
-		
-		Card c = new Pokemon(cardDesc, setPokemon(health, type));
-		
-		deck.addCard(c);
+		boolean exists = true;
+		int index = -1;
+		index = deck.findCard(name);
+		if(index < 0)
+		{
+			exists = false;
+			
+			CardDescriptor cardDesc = new CardDescriptor();
+			cardDesc.name = name;
+			cardDesc.cardType = CardType.POKEMONCARD;
+			cardDesc.collection = collection;
+			
+			Card c = new Pokemon(cardDesc, setPokemon(health, type));
+			
+			deck.addCard(c);
+		}
+		return exists;
 	}
 	
 	private int findCard(String name)
