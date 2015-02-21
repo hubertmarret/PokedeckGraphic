@@ -13,9 +13,10 @@ public class GraphicUserInterface extends JFrame {
 	
 	private PanelConstructor panConstructor = new PanelConstructor();
 	private JPanel menu;
-	private JPanel addPage;
+	private JPanel addCardPage;
 	private JPanel displayCardPage;
 	private JPanel deleteCardPage;
+	private JPanel modifyCardPage;
 		
 	public GraphicUserInterface()
 	{		
@@ -28,17 +29,19 @@ public class GraphicUserInterface extends JFrame {
 	public void start()
 	{		
 		menu = panConstructor.createMenu(cardLayout, content);
-	    addPage = panConstructor.createAddPage(cardLayout, content);
+	    addCardPage = panConstructor.createAddPage(cardLayout, content);
 	    displayCardPage = panConstructor.createDisplayPage(cardLayout, content);
 	    deleteCardPage = panConstructor.createDeletePage(cardLayout, content);
+	    modifyCardPage = panConstructor.createModifyPage(cardLayout, content);
 	    
 	    content.setBackground(new Color(49, 78, 183));
 	    content.setPreferredSize(new Dimension(800, 430));
 	    content.setLayout(cardLayout);
 	    content.add(menu, "menu");
-	    content.add(addPage, "addPage");
+	    content.add(addCardPage, "addCardPage");
 	    content.add(displayCardPage, "displayCardPage");
 	    content.add(deleteCardPage, "deleteCardPage");
+	    content.add(modifyCardPage, "modifyCardPage");
 	    
 	    this.setContentPane(content);
 	    this.setVisible(true);

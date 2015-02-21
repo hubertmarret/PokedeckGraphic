@@ -69,30 +69,23 @@ public class Game {
 		return pokeDesc;
 	}
 	
-	private CardDescriptor setCard()
+	private CardDescriptor setCard(String name, String collection)
 	{
 		CardDescriptor cardDesc = new CardDescriptor();
-		cardDesc.name = ui.scanString("name");
-		cardDesc.collection = ui.scanString("collection");
+		cardDesc.name = name;
+		cardDesc.cardType = CardType.POKEMONCARD;
+		cardDesc.collection = collection;
 		return cardDesc;
 	}
 	
 	public boolean addCard(String name, String collection, int health, PokemonType type)
 	{
 		boolean exists = true;
-		int index = -1;
-		index = deck.findCard(name);
+		int index = findCard(name);
 		if(index < 0)
 		{
 			exists = false;
-			
-			CardDescriptor cardDesc = new CardDescriptor();
-			cardDesc.name = name;
-			cardDesc.cardType = CardType.POKEMONCARD;
-			cardDesc.collection = collection;
-			
-			Card c = new Pokemon(cardDesc, setPokemon(health, type));
-			
+			Card c = new Pokemon(setCard(name, collection), setPokemon(health, type));
 			deck.addCard(c);
 		}
 		return exists;
@@ -105,11 +98,17 @@ public class Game {
 		return index;
 	}
 	
-	public void modifyCard(String name)
+	public boolean modifyCard(String name, String collection, int health, PokemonType type)
 	{
+		boolean exists = false;
 		int index = findCard(name);
-		Card c = deck.getCard(index);
-		
+		if(index >= 0)
+		{
+			exists = true;
+			Card c = deck.getCard(index);
+			c.setCard(setCard(name,  collection), setPokemon(health, type));
+		}
+		return exists;
 	}
 	
 	public int delCard(String name)

@@ -19,7 +19,7 @@ public class Deck implements Serializable {
 		int cpt = 0;
 		for(Card c : deck)
 		{
-			if(c.name.equals(name))
+			if(c.name.toLowerCase().equals(name.toLowerCase()))
 			{
 				index = cpt;
 				break;
