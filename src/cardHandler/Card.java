@@ -59,6 +59,11 @@ public class Card implements Serializable {
 		collection = cardDesc.collection;
 	}
 	
+	public PokemonDescriptor getCard()
+	{
+		return new PokemonDescriptor();
+	}
+	
 	public void display()
 	{
 		System.out.println("Name : "+name);

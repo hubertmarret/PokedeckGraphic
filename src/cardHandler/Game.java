@@ -12,6 +12,7 @@ import descriptor.CardDescriptor;
 import descriptor.PokemonDescriptor;
 import descriptor.TrainerDescriptor;
 
+@SuppressWarnings("unused")
 public class Game {
 	
 	private UserInterface ui;
@@ -21,6 +22,16 @@ public class Game {
 	{
 		ui = new UserInterface();
 		createDeck();
+	}
+	
+	private static class GameHolder
+	{
+		private final static Game instance = new Game();
+	}
+	
+	public static Game getInstance()
+	{
+		return GameHolder.instance;
 	}
 	
 	private void createDeck()
@@ -48,21 +59,14 @@ public class Game {
 		}
 	}
 	
-	private PokemonDescriptor setPokemon()
+	
+	private PokemonDescriptor setPokemon(int health, PokemonType type)
 	{
 		PokemonDescriptor pokeDesc = new PokemonDescriptor();
-		pokeDesc.health = ui.scanInt("health");
-		pokeDesc.pokemonType = ui.pokemonTypeChoice();
-		pokeDesc.description = ui.scanString("description");
+		pokeDesc.health = health;
+		pokeDesc.pokemonType = type;
+		pokeDesc.description = "a default description";
 		return pokeDesc;
-	}
-	
-	private TrainerDescriptor setTrainer()
-	{
-		TrainerDescriptor trDesc = new TrainerDescriptor();
-		trDesc.role = ui.scanString("role");
-		trDesc.description = ui.scanString("description");
-		return trDesc;
 	}
 	
 	private CardDescriptor setCard()
@@ -73,93 +77,63 @@ public class Game {
 		return cardDesc;
 	}
 	
-	private Card createCard()
+	public void addCard(String name, String collection, int health, PokemonType type)
 	{
 		CardDescriptor cardDesc = new CardDescriptor();
-		cardDesc.name = ui.scanString("name");
-		cardDesc.cardType = ui.cardTypeChoice();
-		cardDesc.collection = ui.scanString("collection");
+		cardDesc.name = name;
+		cardDesc.cardType = CardType.POKEMONCARD;
+		cardDesc.collection = collection;
 		
-		Card c;
-		switch(cardDesc.cardType)
-		{
-			case POKEMONCARD:
-				c = new Pokemon(cardDesc, setPokemon());
-				break;
-			case TRAINERCARD:
-				c = new Trainer(cardDesc, setTrainer());
-				break;
-			case ENERGYCARD:
-				c = new Energy(cardDesc, ui.pokemonTypeChoice());
-				break;
-			default: c = new Card(cardDesc);
-		}
-		return c;
+		Card c = new Pokemon(cardDesc, setPokemon(health, type));
+		
+		deck.addCard(c);
 	}
 	
-	private void addCard()
-	{
-		deck.addCard(createCard());
-	}
-	
-	private int findCard()
+	private int findCard(String name)
 	{
 		int index = -1;
-		do
-		{
-			String name = ui.scanString("name");
-			index = deck.findCard(name);
-			if(index < 0)
-				ui.wrongAnswer();
-		}
-		while(index < 0);
+		index = deck.findCard(name);
 		return index;
 	}
 	
-	private void modifyCard()
+	public void modifyCard(String name)
 	{
-		int index = findCard();
+		int index = findCard(name);
 		Card c = deck.getCard(index);
-		switch(c.cardType)
-		{
-			case POKEMONCARD:
-				c.setCard(setCard(), setPokemon());
-				break;
-			case TRAINERCARD:
-				c.setCard(setCard(), setTrainer());
-				break;
-			case ENERGYCARD:
-				c.setCard(setCard(), ui.pokemonTypeChoice());
-				break;
-			default: 
-		}
+		
 	}
 	
-	private void delCard()
+	public int delCard(String name)
 	{
-		int index = findCard();
-		deck.delCard(index);
-		ui.delCard();
+		int index = findCard(name);
+		if(index >= 0)
+			deck.delCard(index);
+		return index;
 	}
 	
-	private void displayCard()
+	public Card displayCard(String name)
 	{
-		int index = findCard();
-		ui.displayCard(deck.displayCard(index));
+		int index = findCard(name);
+		Card card;
+		if(index >= 0)
+			card = deck.getCard(index);
+		else
+			card = null;
+		return card;
 	}
 	
-	private void displayPokedeck()
+	public void displayPokedeck()
 	{
 		ui.displayCard(deck.displayDeck());
 	}
 	
-	private void findCardsByType()
+	public void findCardsByType()
 	{
 		CardType cardType = ui.cardTypeChoice();
 		ui.displayCard(deck.displayByType(cardType));
 	}
 
-	private void findCardsByCollection()
+	public void findCardsByCollection()
 	{
 		String collection = ui.scanString("collection");
 		ui.displayCard(deck.displayByCollection(collection));
@@ -185,29 +159,5 @@ public class Game {
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
 		}
-	}
-	
-	public void infinteLoop()
-	{
-		boolean quit = false;
-		ui.hello();
-		do
-		{	
-			UserChoice userChoice = ui.userChoiceMenu();
-			switch(userChoice)
-			{
-				case ADDCARD: addCard(); break;
-				case MODIFYCARD: modifyCard(); break;
-				case DELCARD: delCard(); break;
-				case DISPLAYCARD: displayCard(); break;
-				case DISPLAYPOKEDECK: displayPokedeck(); break;
-				case FINDCARDSBYTYPE: findCardsByType(); break;
-				case FINDCARDSBYCOLLECTION: findCardsByCollection(); break;
-				case QUIT: quit = true; saveDeck(); break;
-				default: quit = true; saveDeck();
-			}
-		}
-		while(!quit);
-		ui.quit();
 	}
 }

@@ -46,6 +46,15 @@ public class Pokemon extends Card {
 		pokemonType = pokeDesc.pokemonType;
 		description = pokeDesc.description;
 	}
+	
+	public PokemonDescriptor getCard()
+	{
+		PokemonDescriptor pokeDesc = new PokemonDescriptor();
+		pokeDesc.health = health;
+		pokeDesc.pokemonType = pokemonType;
+		pokeDesc.description = description;
+		return pokeDesc;
+	}
 
 	public void display()
 	{
