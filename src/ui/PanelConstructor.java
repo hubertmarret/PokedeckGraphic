@@ -110,17 +110,43 @@ public class PanelConstructor {
 		typeList.setPreferredSize(new Dimension(200,30));
 		JLabel typeListLabel = label("PokemonType  ");
 		
+		JLabel btnMsg = new JLabel("undefined");
+		btnMsg.setVisible(false);
+		
 		Button validate = new Button("Validate");
 		validate.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent event)
 			{
-				Game.getInstance().addCard(cardName.getText(), collection.getText(), Integer.parseInt(health.getText()), PokemonType.values()[typeList.getSelectedIndex()]);
+				String sCardName = cardName.getText();
+				int iHealth = Integer.parseInt(health.getText());
+				if(iHealth > 9 && iHealth < 151)
+				{
+					Game.getInstance().addCard(sCardName, collection.getText(), iHealth, PokemonType.values()[typeList.getSelectedIndex()]);
+					Game.getInstance().saveDeck();
+					btnMsg.setText("the card " + sCardName + " has been added");
+				}
+				else
+				{
+					btnMsg.setText("the health must be an number between 10 and 150 included");
+				}
+				btnMsg.setVisible(true);
 			}
 		});
 		
 		Button homeBtn = new Button("Home", "menu");
 	    homeBtn.setToChangePage(cl, content);
+	    homeBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				cardName.setText("");
+				collection.setText("");
+				health.setText("");
+				typeList.setSelectedIndex(0);
+				btnMsg.setVisible(false);
+			}
+		});
 	    
 	    /* Initialize the panels */
 	    pan.setPreferredSize(new Dimension(900, 450));
@@ -146,10 +172,12 @@ public class PanelConstructor {
 		typeListLabel.setBounds(25 + insets.left, 200 + insets.top, size.width, size.height);
 		size = typeList.getPreferredSize();
 		typeList.setBounds(200 + insets.left, 200 + insets.top, size.width, size.height);
+		size = btnMsg.getPreferredSize();
+		btnMsg.setBounds(100 + insets.left, 230 + insets.top, 600, size.height);
 		size = validate.getPreferredSize();
-		validate.setBounds(350 + insets.left, 240 + insets.top, size.width, size.height);
+		validate.setBounds(350 + insets.left, 260 + insets.top, size.width, size.height);
 		size = homeBtn.getPreferredSize();
-		homeBtn.setBounds(350 + insets.left, 280 + insets.top, size.width, size.height);
+		homeBtn.setBounds(350 + insets.left, 300 + insets.top, size.width, size.height);
 		
 		/* Add elements to the panels */
 		pan.add(title);
@@ -161,6 +189,7 @@ public class PanelConstructor {
 		pan.add(health);
 		pan.add(typeListLabel);
 		pan.add(typeList);
+		pan.add(btnMsg);
 		pan.add(validate);
 		pan.add(homeBtn);
 		
@@ -190,7 +219,10 @@ public class PanelConstructor {
 				String cardName = cardNameField.getText();
 				int index = Game.getInstance().delCard(cardName);
 				if(index >= 0)
+				{
 					btnMsg.setText("the card " + cardName + " has been deleted");
+					Game.getInstance().saveDeck();
+				}
 				else
 					btnMsg.setText("the card " + cardName + " doesn't exits");
 				btnMsg.setVisible(true);
@@ -277,7 +309,7 @@ public class PanelConstructor {
 				{
 					cardName.setText(card.name);
 					collection.setText(card.collection);
-					health.setText(""+card.getCard().health);
+					health.setText("" + card.getCard().health + " HP");
 					type.setText(card.getCard().pokemonType.toString());
 					
 					cardName.setVisible(true);

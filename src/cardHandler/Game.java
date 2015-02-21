@@ -140,7 +140,7 @@ public class Game {
 	}
 	
 	
-	private void saveDeck()
+	public void saveDeck()
 	{
 		try {
 			FileOutputStream fos = new FileOutputStream("deck.serial");
