@@ -3,6 +3,7 @@ package ui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -17,13 +18,17 @@ public class PanelConstructor {
 	private Color colTransparent;
 	private Color colText;
 	private Font textFont;
-		
+	private ArrayList<Card> deck;
+	private int cpt;
+	
 	public PanelConstructor()
 	{
 		col = new Color(49, 78, 183);
 		colTransparent = new Color(46, 75, 180, 5);
 		colText = new Color(255, 207, 0);
 		textFont = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+		
+		cpt = 0;
 	}
 	
 	
@@ -49,7 +54,16 @@ public class PanelConstructor {
 		Button displayCardBtn = new Button("Display a card", "displayCardPage");
 		displayCardBtn.setToChangePage(cl, content);
 		
-		Button displayDeckBtn = new Button("Display the deck");
+		Button displayDeckBtn = new Button("Display the deck", "displayDeckPage");
+		displayDeckBtn.setToChangePage(cl, content);
+		displayDeckBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				deck = Game.getInstance().getPokedeck();
+				cpt = 0;
+			}
+		});
 		
 		
 		JPanel header = new JPanel();
@@ -111,8 +125,8 @@ public class PanelConstructor {
 		typeList.setPreferredSize(new Dimension(200,30));
 		JLabel typeListLabel = label("PokemonType  ");
 		
-		JLabel btnMsg = new JLabel("undefined");
-		btnMsg.setVisible(false);
+		JLabel message = new JLabel("undefined");
+		message.setVisible(false);
 		
 		Button addBtn = new Button("Add card");
 		addBtn.addActionListener(new ActionListener()
@@ -127,16 +141,16 @@ public class PanelConstructor {
 					if(!exists)
 					{
 						Game.getInstance().saveDeck();
-						btnMsg.setText("the card " + sCardName + " has been added");
+						message.setText("the card " + sCardName + " has been added");
 					}
 					else
-						btnMsg.setText("the card " + sCardName + " already exists");
+						message.setText("the card " + sCardName + " already exists");
 				}
 				else
 				{
-					btnMsg.setText("the health must be an number between 10 and 150 included");
+					message.setText("the health must be an number between 10 and 150 included");
 				}
-				btnMsg.setVisible(true);
+				message.setVisible(true);
 			}
 		});
 		
@@ -150,7 +164,7 @@ public class PanelConstructor {
 				collection.setText("");
 				health.setText("");
 				typeList.setSelectedIndex(0);
-				btnMsg.setVisible(false);
+				message.setVisible(false);
 			}
 		});
 	    
@@ -178,8 +192,8 @@ public class PanelConstructor {
 		typeListLabel.setBounds(25 + insets.left, 200 + insets.top, size.width, size.height);
 		size = typeList.getPreferredSize();
 		typeList.setBounds(200 + insets.left, 200 + insets.top, size.width, size.height);
-		size = btnMsg.getPreferredSize();
-		btnMsg.setBounds(100 + insets.left, 230 + insets.top, 600, size.height);
+		size = message.getPreferredSize();
+		message.setBounds(100 + insets.left, 230 + insets.top, 600, size.height);
 		size = addBtn.getPreferredSize();
 		addBtn.setBounds(350 + insets.left, 260 + insets.top, size.width, size.height);
 		size = homeBtn.getPreferredSize();
@@ -195,7 +209,7 @@ public class PanelConstructor {
 		pan.add(health);
 		pan.add(typeListLabel);
 		pan.add(typeList);
-		pan.add(btnMsg);
+		pan.add(message);
 		pan.add(addBtn);
 		pan.add(homeBtn);
 		
@@ -230,8 +244,8 @@ public class PanelConstructor {
 		cardNameField.setPreferredSize(new Dimension(200,30));
 		JLabel cardNameFieldLabel = label("Name");
 		
-		JLabel btnMsg = new JLabel("undefined");
-		btnMsg.setVisible(false);
+		JLabel message = new JLabel("undefined");
+		message.setVisible(false);
 		
 		Button validate = new Button("Validate");
 		validate.addActionListener(new ActionListener()
@@ -254,7 +268,7 @@ public class PanelConstructor {
 					collection.setVisible(true);
 					health.setVisible(true);
 					typeList.setVisible(true);
-					btnMsg.setText("see you card info above");
+					message.setText("see you card info above");
 				}
 				else
 				{
@@ -262,9 +276,9 @@ public class PanelConstructor {
 					collection.setVisible(false);
 					health.setVisible(false);
 					typeList.setVisible(false);
-					btnMsg.setText("the card " + sCardName + " doesn't exits");
+					message.setText("the card " + sCardName + " doesn't exits");
 				}
-				btnMsg.setVisible(true);
+				message.setVisible(true);
 			}
 		});
 		
@@ -281,16 +295,16 @@ public class PanelConstructor {
 					if(exists)
 					{
 						Game.getInstance().saveDeck();
-						btnMsg.setText("the card " + sCardName + " has been modified");
+						message.setText("the card " + sCardName + " has been modified");
 					}
 					else
-						btnMsg.setText("the card " + sCardName + " doesn't exist");
+						message.setText("the card " + sCardName + " doesn't exist");
 				}
 				else
 				{
-					btnMsg.setText("the health must be an number between 10 and 150 included");
+					message.setText("the health must be an number between 10 and 150 included");
 				}
-				btnMsg.setVisible(true);
+				message.setVisible(true);
 			}
 		});
 		
@@ -342,8 +356,8 @@ public class PanelConstructor {
 		cardNameFieldLabel.setBounds(500 + insets.left, 80 + insets.top, size.width, size.height);
 		size = cardNameField.getPreferredSize();
 		cardNameField.setBounds(620 + insets.left, 80 + insets.top, size.width, size.height);
-		size = btnMsg.getPreferredSize();
-		btnMsg.setBounds(100 + insets.left, 240 + insets.top, 600, size.height);
+		size = message.getPreferredSize();
+		message.setBounds(100 + insets.left, 240 + insets.top, 600, size.height);
 		size = validate.getPreferredSize();
 		validate.setBounds(620 + insets.left, 120 + insets.top, size.width, size.height);
 		size = modifyBtn.getPreferredSize();
@@ -362,7 +376,7 @@ public class PanelConstructor {
 		pan.add(typeList);
 		pan.add(cardNameFieldLabel);
 		pan.add(cardNameField);
-		pan.add(btnMsg);
+		pan.add(message);
 		pan.add(validate);
 		pan.add(modifyBtn);
 		pan.add(homeBtn);
@@ -382,8 +396,8 @@ public class PanelConstructor {
 		cardNameField.setPreferredSize(new Dimension(200,30));
 		JLabel cardNameFieldLabel = label("Name");
 		
-		JLabel btnMsg = new JLabel("undefined");
-		btnMsg.setVisible(false);
+		JLabel message = new JLabel("undefined");
+		message.setVisible(false);
 		
 		Button validate = new Button("Validate");
 		validate.addActionListener(new ActionListener()
@@ -394,12 +408,12 @@ public class PanelConstructor {
 				int index = Game.getInstance().delCard(cardName);
 				if(index >= 0)
 				{
-					btnMsg.setText("the card " + cardName + " has been deleted");
+					message.setText("the card " + cardName + " has been deleted");
 					Game.getInstance().saveDeck();
 				}
 				else
-					btnMsg.setText("the card " + cardName + " doesn't exits");
-				btnMsg.setVisible(true);
+					message.setText("the card " + cardName + " doesn't exits");
+				message.setVisible(true);
 			}
 		});
 		
@@ -421,8 +435,8 @@ public class PanelConstructor {
 		cardNameFieldLabel.setBounds(100 + insets.left, 80 + insets.top, size.width, size.height);
 		size = cardNameField.getPreferredSize();
 		cardNameField.setBounds(220 + insets.left, 80 + insets.top, size.width, size.height);
-		size = btnMsg.getPreferredSize();
-		btnMsg.setBounds(100 + insets.left, 200 + insets.top, 600, size.height);
+		size = message.getPreferredSize();
+		message.setBounds(100 + insets.left, 200 + insets.top, 600, size.height);
 		size = validate.getPreferredSize();
 		validate.setBounds(150 + insets.left, 120 + insets.top, size.width, size.height);
 		size = homeBtn.getPreferredSize();
@@ -431,7 +445,7 @@ public class PanelConstructor {
 		pan.add(title);
 		pan.add(cardNameFieldLabel);
 		pan.add(cardNameField);
-		pan.add(btnMsg);
+		pan.add(message);
 		pan.add(validate);
 		pan.add(homeBtn);
 		
@@ -466,8 +480,8 @@ public class PanelConstructor {
 		cardNameField.setPreferredSize(new Dimension(200,30));
 		JLabel cardNameFieldLabel = label("Name");
 		
-		JLabel btnMsg = new JLabel("undefined");
-		btnMsg.setVisible(false);
+		JLabel message = new JLabel("undefined");
+		message.setVisible(false);
 		
 		Button validate = new Button("Validate");
 		validate.addActionListener(new ActionListener()
@@ -490,7 +504,7 @@ public class PanelConstructor {
 					collection.setVisible(true);
 					health.setVisible(true);
 					type.setVisible(true);
-					btnMsg.setText("see you card info above");
+					message.setText("see you card info above");
 				}
 				else
 				{
@@ -498,9 +512,9 @@ public class PanelConstructor {
 					collection.setVisible(false);
 					health.setVisible(false);
 					type.setVisible(false);
-					btnMsg.setText("the card " + sCardName + " doesn't exits");
+					message.setText("the card " + sCardName + " doesn't exits");
 				}
-				btnMsg.setVisible(true);
+				message.setVisible(true);
 			}
 		});
 		
@@ -519,7 +533,7 @@ public class PanelConstructor {
 				collection.setVisible(false);
 				health.setVisible(false);
 				type.setVisible(false);
-				btnMsg.setVisible(false);
+				message.setVisible(false);
 			}
 		});
 		
@@ -553,8 +567,8 @@ public class PanelConstructor {
 		cardNameFieldLabel.setBounds(500 + insets.left, 80 + insets.top, size.width, size.height);
 		size = cardNameField.getPreferredSize();
 		cardNameField.setBounds(620 + insets.left, 80 + insets.top, size.width, size.height);
-		size = btnMsg.getPreferredSize();
-		btnMsg.setBounds(100 + insets.left, 240 + insets.top, 600, size.height);
+		size = message.getPreferredSize();
+		message.setBounds(100 + insets.left, 240 + insets.top, 600, size.height);
 		size = validate.getPreferredSize();
 		validate.setBounds(620 + insets.left, 120 + insets.top, size.width, size.height);
 		size = homeBtn.getPreferredSize();
@@ -571,8 +585,143 @@ public class PanelConstructor {
 		pan.add(type);
 		pan.add(cardNameFieldLabel);
 		pan.add(cardNameField);
-		pan.add(btnMsg);
+		pan.add(message);
 		pan.add(validate);
+		pan.add(homeBtn);
+		
+		return pan;
+	}
+	
+	public JPanel createDisplayDeckPage(CardLayout cl, JPanel content)
+	{	
+		
+		/* Initialize elements */
+		JLabel title = new JLabel("Display the deck");
+		Font titleFont = new Font(Font.SANS_SERIF, Font.BOLD, 35);
+		title.setFont(titleFont);
+		title.setForeground(colText);
+		
+		JLabel cardNameLabel = label("Name :");
+		JLabel cardName = label("unknown");
+		cardName.setVisible(false);
+		
+		JLabel collectionLabel = label("Collection :");
+		JLabel collection = label("unknown");
+		collection.setVisible(false);
+		
+		JLabel healthLabel = label("Health :");
+		JLabel health = label("unknown");
+		health.setVisible(false);
+		
+		JLabel typeLabel = label("PokemonType :");
+		JLabel type = label("unknown");
+		type.setVisible(false);
+		
+		JLabel message = new JLabel("undefined");
+		message.setText("click on 'next page' to see the first card");
+		
+		Button nextBtn = new Button("Next card");
+		nextBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				if(deck.size() > 0)
+				{
+					if(cpt < deck.size())
+					{
+						message.setVisible(false);
+					}
+					else
+					{
+						cpt = 0;
+						message.setText("back to start of the deck");
+						message.setVisible(true);
+					}
+										
+					cardName.setText(deck.get(cpt).name);
+					collection.setText(deck.get(cpt).collection);
+					health.setText("" + deck.get(cpt).getCard().health + " HP");
+					type.setText(deck.get(cpt).getCard().pokemonType.toString());
+					
+					cpt++;
+					
+					cardName.setVisible(true);
+					collection.setVisible(true);
+					health.setVisible(true);
+					type.setVisible(true);
+				}
+				else
+				{
+					message.setText("the deck is empty");
+					message.setVisible(true);
+				}
+			}
+		});
+		
+		Button homeBtn = new Button("Home", "menu");
+	    homeBtn.setToChangePage(cl, content);
+	    homeBtn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				cardName.setText("unknown");
+				collection.setText("unknown");
+				health.setText("unknown");
+				type.setText("unknown");
+				
+				cardName.setVisible(false);
+				collection.setVisible(false);
+				health.setVisible(false);
+				type.setVisible(false);
+				message.setVisible(false);
+			}
+		});
+		
+	    /* Initialize the panels */
+	    pan = new JPanel();
+		pan.setBackground(col);
+	    pan.setPreferredSize(new Dimension(900, 450));
+	    pan.setLayout(null);
+	    
+	    
+	    /* Set elements position */
+		Insets insets = pan.getInsets();
+		Dimension size = title.getPreferredSize();
+		title.setBounds(330 + insets.left, 5 + insets.top, size.width, size.height);
+		size = cardNameLabel.getPreferredSize();
+		cardNameLabel.setBounds(25 + insets.left, 80 + insets.top, size.width, size.height);
+		size = cardName.getPreferredSize();
+		cardName.setBounds(220 + insets.left, 80 + insets.top, size.width, size.height);
+		size = collectionLabel.getPreferredSize();
+		collectionLabel.setBounds(25 + insets.left, 120 + insets.top, size.width, size.height);
+		size = collection.getPreferredSize();
+		collection.setBounds(220 + insets.left, 120 + insets.top, size.width, size.height);
+		size = healthLabel.getPreferredSize();
+		healthLabel.setBounds(25 + insets.left, 160 + insets.top, size.width, size.height);
+		size = health.getPreferredSize();
+		health.setBounds(220 + insets.left, 160 + insets.top, size.width, size.height);
+		size = typeLabel.getPreferredSize();
+		typeLabel.setBounds(25 + insets.left, 200 + insets.top, size.width, size.height);
+		size = type.getPreferredSize();
+		type.setBounds(220 + insets.left, 200 + insets.top, size.width, size.height);
+		size = message.getPreferredSize();
+		message.setBounds(100 + insets.left, 240 + insets.top, 600, size.height);
+		size = nextBtn.getPreferredSize();
+		nextBtn.setBounds(350 + insets.left, 280 + insets.top, size.width, size.height);
+		size = homeBtn.getPreferredSize();
+		homeBtn.setBounds(350 + insets.left, 320 + insets.top, size.width, size.height);
+	    
+		pan.add(title);
+		pan.add(cardNameLabel);
+		pan.add(cardName);
+		pan.add(collectionLabel);
+		pan.add(collection);
+		pan.add(healthLabel);
+		pan.add(health);
+		pan.add(typeLabel);
+		pan.add(type);
+		pan.add(message);
+		pan.add(nextBtn);
 		pan.add(homeBtn);
 		
 		return pan;

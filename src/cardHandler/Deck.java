@@ -34,6 +34,11 @@ public class Deck implements Serializable {
 		return deck.get(index);
 	}
 	
+	public ArrayList<Card> getDeck()
+	{
+		return deck;
+	}
+	
 	private ArrayList<Card> findCardsByType(CardType cardType)
 	{
 		ArrayList<Card> cards = new ArrayList<>();

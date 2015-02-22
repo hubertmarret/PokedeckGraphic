@@ -17,7 +17,8 @@ public class GraphicUserInterface extends JFrame {
 	private JPanel displayCardPage;
 	private JPanel deleteCardPage;
 	private JPanel modifyCardPage;
-		
+	private JPanel displayDeckPage;
+	
 	public GraphicUserInterface()
 	{		
 		this.setTitle("Pokedeck");
@@ -33,6 +34,7 @@ public class GraphicUserInterface extends JFrame {
 	    displayCardPage = panConstructor.createDisplayPage(cardLayout, content);
 	    deleteCardPage = panConstructor.createDeletePage(cardLayout, content);
 	    modifyCardPage = panConstructor.createModifyPage(cardLayout, content);
+	    displayDeckPage = panConstructor.createDisplayDeckPage(cardLayout, content);
 	    
 	    content.setBackground(new Color(49, 78, 183));
 	    content.setPreferredSize(new Dimension(800, 430));
@@ -42,6 +44,7 @@ public class GraphicUserInterface extends JFrame {
 	    content.add(displayCardPage, "displayCardPage");
 	    content.add(deleteCardPage, "deleteCardPage");
 	    content.add(modifyCardPage, "modifyCardPage");
+	    content.add(displayDeckPage, "displayDeckPage");
 	    
 	    this.setContentPane(content);
 	    this.setVisible(true);

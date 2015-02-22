@@ -5,9 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import ui.UserChoice;
-import ui.UserInterface;
 import descriptor.CardDescriptor;
 import descriptor.PokemonDescriptor;
 import descriptor.TrainerDescriptor;
@@ -15,12 +15,10 @@ import descriptor.TrainerDescriptor;
 @SuppressWarnings("unused")
 public class Game {
 	
-	private UserInterface ui;
 	private Deck deck;
 	
 	public Game()
 	{
-		ui = new UserInterface();
 		createDeck();
 	}
 	
@@ -130,23 +128,10 @@ public class Game {
 		return card;
 	}
 	
-	public void displayPokedeck()
+	public ArrayList<Card> getPokedeck()
 	{
-		ui.displayCard(deck.displayDeck());
+		return deck.getDeck();
 	}
-	
-	public void findCardsByType()
-	{
-		CardType cardType = ui.cardTypeChoice();
-		ui.displayCard(deck.displayByType(cardType));
-	}
-
-	public void findCardsByCollection()
-	{
-		String collection = ui.scanString("collection");
-		ui.displayCard(deck.displayByCollection(collection));
-	}
-	
 	
 	public void saveDeck()
 	{
